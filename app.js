@@ -1,30 +1,3 @@
-const players = [
-
-	{
-		name: "bob",
-		score: 50,
-		id: 1
-	},
-	{
-		name: "joe",
-		score: 85,
-		id: 2
-	},
-	{
-		name: "dude",
-		score: 95,
-		id: 3
-	},
-	{
-		name: "karen",
-		score: 80,
-		id: 4
-	}
-
-
-];
-
-
 
 const Header = (props) => {
 	return (
@@ -41,46 +14,88 @@ const Player = (props) => {
 	return (
 		<div className="player">
 			<span className="player-name">{props.name}</span>
-			<Counter score={props.score} />
+			<Counter />
 		</div>
 	);
 }
 
-const Counter = (props) => {
-	return (
+class Counter extends React.Component {
 
-		<div className="counter">
-			<button className="counter-action decrement"> - </button>
-			<span className="counter-score">{props.score}</span>
-			<button className="counter-action increment"> + </button>
-		</div>
-	);
+	state = {
+		score: 0
+	};
+
+	incrementScore = () => {
+		this.setState(prevState => ({
+			score: prevState.score + 1
+		}));
+	}
+
+	decrementScore = () => {
+		this.setState(prevState => ({
+			score: prevState.score - 1
+		}));
+	}
+
+
+
+	render() {
+		return (
+
+			<div className="counter">
+				<button className="counter-action decrement" onClick={this.decrementScore}> - </button>
+				<span className="counter-score">{this.state.score}</span>
+				<button className="counter-action increment" onClick={this.incrementScore}> + </button>
+			</div>
+		);
+	}
 }
 
-const App = (props) => {
-	return (
-		<div className="scoreboard">
+class App extends React.Component {
 
-			<Header
-				title="React Project Scoreboard"
-				totalPlayers={props.initialPlayers.length} />
+	state = {
+		players: [
+			{
+				name: "bob",
+				id: 1
+			},
+			{
+				name: "joe",
+				id: 2
+			},
+			{
+				name: "dude",
+				id: 3
+			},
+			{
+				name: "karen",
 
-			{/* Players list */}
-			{props.initialPlayers.map(
-				player => <Player
-					name={player.name}
-					score={player.score}
-					key={player.id.toString()} />
-			)}
+				id: 4
+			}
+		]
+	};
 
-		</div>
+	render() {
+		return (
+			<div className="scoreboard">
+				<Header
+					title="React Project Scoreboard"
+					totalPlayers={this.state.players.length} />
 
-	);
+				{this.state.players.map(player =>
+					<Player
+						name={player.name}
+						key={player.id.toString()} />
+				)}
+			</div>
+		);
+	}
+
 }
 
 
 ReactDOM.render(
-	<App initialPlayers={players} />,
+	<App />,
 	document.getElementById('root')
 
 
